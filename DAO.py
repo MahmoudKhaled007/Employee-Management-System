@@ -2,7 +2,17 @@ import mysql.connector
 
 
 class Employee:
-    def __init__(self, emp_id, fname, lname, location, phone1, sex, email, password):
+    def __init__(
+        self,
+        emp_id=None,
+        fname=None,
+        lname=None,
+        location=None,
+        phone1=None,
+        sex=None,
+        email=None,
+        password=None,
+    ):
         self.emp_id = emp_id
         self.fname = fname
         self.lname = lname
@@ -22,6 +32,9 @@ class EmployeeDAO:
     """
 
     def __init__(self):
+        """_summary_
+        When the class being called every time will open a new connection to the database
+        """
         self.connection = mysql.connector.connect(
             host="localhost",
             user="root",
@@ -30,7 +43,29 @@ class EmployeeDAO:
         )
         self.cursor = self.connection.cursor(buffered=True)
 
+    def get_all_employees(self):
+        """
+            Select Statement to retrieve all data for the employees
+        Returns:
+            _type_: _description_
+            Object: which contains Record data
+        """
+        query = "SELECT emp_id,fname,lname,location,phone1,sex,email,pass FROM employee"
+        self.cursor.execute(query)
+        result = self.cursor.fetchall()
+        [print(i) for i in result]
+        return result
+
     def get_emp_by_id(self, emp_id):
+        """
+            Select Statement to retrieve all data for the employees based on their id
+        Args:
+            emp_id (_type_): _description_
+                emp_id (int): id of employee needs to retrieve
+        Returns:
+            _type_: _description_
+            Object: which contains Record data
+        """
         query = "SELECT emp_id,fname,lname,location,phone1,sex,email,pass FROM employee WHERE emp_id = %s"
         self.cursor.execute(query, (emp_id,))
         result = self.cursor.fetchone()
@@ -43,38 +78,70 @@ class EmployeeDAO:
         else:
             return None
 
-    def insert_emp(self, emp):
-        """_summary_
-        Insert one record to the Employee table
+    def insert_emp(self, employees):
+        """Insert multiple records to the Employee table
 
         Args:
-            emp (_type_): _description_
-            object or instance  of Employee class
+            employees (list): List of Employee objects
+
         Returns:
-            _type_: _description_
-            last_row_id  which is INT
+            int: The last inserted row ID
         """
         query = "INSERT INTO employee (fname, lname, location, phone1, sex, email, pass) VALUES (%s, %s,%s, %s,%s, %s,%s)"
-        values = (
-            emp.fname,
-            emp.lname,
-            emp.location,
-            emp.phone1,
-            emp.sex,
-            emp.email,
-            emp.password,
-        )
-        self.cursor.execute(query, values)
+        values = [
+            (
+                emp.fname,
+                emp.lname,
+                emp.location,
+                emp.phone1,
+                emp.sex,
+                emp.email,
+                emp.password,
+            )
+            for emp in employees
+        ]
+        self.cursor.executemany(query, values)
         self.connection.commit()
         return self.cursor.lastrowid
 
-    def update_user(self, user):
-        query = "UPDATE users SET name = %s, email = %s WHERE id = %s"
-        values = (user.name, user.email, user.id)
-        self.cursor.execute(query, values)
-        self.connection.commit()
+    def update_emp(self, employees):
+        """Update  multiple records to the Employee table
 
-    def delete_user(self, user_id):
-        query = "DELETE FROM users WHERE id = %s"
-        self.cursor.execute(query, (user_id,))
+        Args:
+            employees (list): List of Employee objects
+
+        Returns:
+            int: Number of rows affected
+        """
+        query = "UPDATE employee SET fname=%s, lname=%s, location=%s, phone1=%s, sex=%s, email=%s, pass=%s WHERE emp_id = %s"
+        values = [
+            (
+                emp.fname,
+                emp.lname,
+                emp.location,
+                emp.phone1,
+                emp.sex,
+                emp.email,
+                emp.password,
+                emp.emp_id,
+            )
+            for emp in employees
+        ]
+        self.cursor.executemany(query, values)
         self.connection.commit()
+        print(self.cursor.rowcount, "record(s) affected")
+
+    def delete_emp(self, emp_id):
+        """Delete  one record to the Employee table
+
+        Args:
+            emp_id (int): Id of employee mustn't be a foreign key in another table
+
+        Returns:
+            int: Number of rows affected
+        """
+        query = "DELETE FROM employee WHERE emp_id = %s"
+        self.cursor.execute(query, (emp_id,))
+        self.connection.commit()
+        print(self.cursor.rowcount, "record(s) affected")
+
