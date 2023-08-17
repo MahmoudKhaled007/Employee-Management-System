@@ -43,9 +43,27 @@ class EmployeeDAO:
         else:
             return None
 
-    def insert_user(self, user):
-        query = "INSERT INTO users (name, email) VALUES (%s, %s)"
-        values = (user.name, user.email)
+    def insert_emp(self, emp):
+        """_summary_
+        Insert one record to the Employee table
+
+        Args:
+            emp (_type_): _description_
+            object or instance  of Employee class
+        Returns:
+            _type_: _description_
+            last_row_id  which is INT
+        """
+        query = "INSERT INTO employee (fname, lname, location, phone1, sex, email, pass) VALUES (%s, %s,%s, %s,%s, %s,%s)"
+        values = (
+            emp.fname,
+            emp.lname,
+            emp.location,
+            emp.phone1,
+            emp.sex,
+            emp.email,
+            emp.password,
+        )
         self.cursor.execute(query, values)
         self.connection.commit()
         return self.cursor.lastrowid
