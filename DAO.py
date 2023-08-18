@@ -411,13 +411,147 @@ class LeaveDAO:
         """Delete  records to the Leaves table
 
         Args:
-            dep_ids (list): Ids of Departments, mustn't be a foreign key in another table
+            leave_ids (list): Ids of leave needs to be deleted
 
         Returns:
             int: Number of rows affected
         """
         query = "DELETE FROM `leave` WHERE leave_id = %s"
         values = [([lea]) for lea in leave_ids]
+        self.cursor.executemany(query, values)
+        self.connection.commit()
+        print(self.cursor.rowcount, "record(s) affected")
+
+
+class Salary:
+    def __init__(
+        self,
+        salary_id=None,
+        amount=None,
+        bounes=None,
+        annual=None,
+        overtime=None,
+        department_dep_id=None,
+    ):
+        self.salary_id = salary_id
+        self.amount = amount
+        self.bounes = bounes
+        self.annual = annual
+        self.overtime = overtime
+        self.department_dep_id = department_dep_id
+
+
+class SalaryDAO:
+    """
+    _summary_
+    This class for to represent Database Salary Tables and provides the encapsulation of the database-specific code,
+    that is, it is isolated from the main program.
+    To achieve principle of Separation of Logic and it make it easy when testing
+    """
+
+    def __init__(self):
+        """_summary_
+        When the class being called every time will open a new connection to the database
+        """
+        self.connection = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="mahmoud2001",
+            database="employee_managment_system",
+        )
+        self.cursor = self.connection.cursor(buffered=True)
+
+    def get_all_salary(self):
+        """
+            Select Statement to retrieve all data for the Leave table
+        Returns:
+            _type_: _description_
+            Object: which contains Record data
+        """
+        # `` because leave is reserved keyword in python
+        query = "SELECT salary_id,amount,bounes,annual,overtime,department_dep_id FROM salary"
+        self.cursor.execute(query)
+        result = self.cursor.fetchall()
+        if result:
+            [print(i) for i in result]
+            return result
+        else:
+            return None
+
+    def get_salary_by_id(self, salary_id):
+        """
+            Select Statement to retrieve all data for the Salary based on their id
+        Args:
+            salary_id (_type_): _description_
+                salary_id (int): id of salary needs to retrieve
+        Returns:
+            _type_: _description_
+            Object: which contains Record data
+        """
+        query = "SELECT salary_id,amount,bounes,annual,overtime,department_dep_id FROM salary WHERE salary_id = %s"
+        self.cursor.execute(query, (salary_id,))
+        result = self.cursor.fetchone()
+        if result:
+            return result
+        else:
+            return None
+
+    def insert_salary(self, **kwargs):
+        """Insert a record into the leave table
+            department_dep_id: Foreign Key is Mandatory to add in Arguments
+        Args:
+            **kwargs: Key-value pairs for inserting specific columns
+            department_dep_id(String),
+            date(String),
+            status(String),
+            reason(String)
+        Returns:
+            int: The last inserted row ID
+        """
+        if "department_dep_id" in kwargs:
+            column_names = ", ".join(list(kwargs.keys()))
+            value_placeholders = ", ".join(["%s" for _ in kwargs.keys()])
+            query = f"INSERT INTO salary ({column_names}) VALUES ({value_placeholders})"
+            values = tuple(kwargs.values())
+            self.cursor.execute(query, values)
+            self.connection.commit()
+            return self.cursor.lastrowid
+        else:
+            raise TypeError(
+                "Missing Mandatory Foreign Key : Please add department_dep_id to the arguments"
+            )
+
+    def update_salary(self, salaries, **kwargs):
+        """Update multiple records in the salary table
+
+        Args:
+            salaries (list): List of salaries objects
+            **kwargs: Additional key-value pairs for updating specific columns
+
+        Returns:
+            int: Number of rows affected
+        """
+        # Construct the SET clause dynamically based on kwargs
+        set_clause = ", ".join([f"{key}=%s" for key in kwargs.keys()])
+
+        query = f"UPDATE salary SET {set_clause} WHERE salary_id = %s"
+        values = [tuple(list(kwargs.values()) + [sal]) for sal in salaries]
+        print(values)
+        self.cursor.executemany(query, values)
+        self.connection.commit()
+        print(self.cursor.rowcount, "record(s) affected")
+
+    def delete_salary(self, salary_ids):
+        """Delete  records to the Leaves table
+
+        Args:
+            salary_ids (list): Ids of Salary needs to be deleted
+
+        Returns:
+            int: Number of rows affected
+        """
+        query = "DELETE FROM salary WHERE salary_id = %s"
+        values = [([sal]) for sal in salary_ids]
         self.cursor.executemany(query, values)
         self.connection.commit()
         print(self.cursor.rowcount, "record(s) affected")

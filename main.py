@@ -94,15 +94,32 @@ leave = DAO.LeaveDAO()
 #     Employee_emp_id=2, date="2023-02-23", status="Sick", reason="Sick"
 # )
 # print(last_row_id)
-leave.get_all_leaves()
+# leave.get_all_leaves()
 #! Update Leave
-leaves = ["1", "2"]
-x = leave.update_leave(leaves, reason="ssssssss", status="from KWRGS")
-print(x)
-leave.get_all_leaves()
+# leaves = ["1", "2"]
+# x = leave.update_leave(leaves, reason="ssssssss", status="from KWRGS")
+# print(x)
+# leave.get_all_leaves()
 
-leave.delete_leave(leaves[0])
-leave.get_all_leaves()
+# leave.delete_leave(leaves[0])
+# leave.get_all_leaves()
 
 # dep_obj.get_all_departments()
 # leave.update_leave()
+
+
+# ** SALARY
+salary = DAO.SalaryDAO()
+# salary.get_all_salary()
+# for i in range(10):
+#     x = salary.insert_salary(
+        
+#         amount=f"{i+1}000",
+#         bounes=f"{i+1}00",
+#         annual=f"2023-0{i+1}-02",
+#         overtime=f"{i+1}.5",
+#         department_dep_id="2",
+#     )
+# print(x)
+salary.delete_salary(['1','2'])
+salary.get_all_salary()
