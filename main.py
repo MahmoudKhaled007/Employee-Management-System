@@ -1,7 +1,7 @@
 import DAO
 
 # Employee
-# EmployeeDAO = DAO.EmployeeDAO()
+EmployeeDAO = DAO.EmployeeDAO()
 
 # # Retrieve a user by ID
 # user = EmployeeDAO.get_emp_by_id(1)
@@ -10,26 +10,22 @@ import DAO
 # else:
 #     print("User not found.")
 
-# # emp_dao = DAO.EmployeeDAO()  # Create an instance of the EmployeeDAO class
-# # emp = DAO.Employee(
-# #     None, "Zidan", "Mohamed", "New Cairo", "01065216622", "M", "zidan@gmail.com", "123"
-# # )
-# # print(emp_dao.insert_emp(emp))
 
-emp_dao = DAO.EmployeeDAO()
-emp1 = DAO.Employee(
-    2, "eee", "Mohamed", "New Cairo", "01065216622", "M", "zidan@gmail.com", "123"
-)
-emp2 = DAO.Employee(
-    1, "qqq", "Doe", "London", "0123456789", "M", "john.doe@gmail.com", "456"
-)
+# INSERT EMPLOYEEE
+# emp_dao = DAO.EmployeeDAO()
+# emp1 = DAO.Employee(
+#     None, "eee", "Mohamed", "New Cairo", "01065216622", "M", "zidan@gmail.com", "123"
+# )
+# emp2 = DAO.Employee(
+#     None, "qqq", "Doe", "London", "0123456789", "M", "john.doe@gmail.com", "456"
+# )
 
-employees = ["1", "2", "3"]
+# employees = [emp1,emp2]
 
 # last_row_id = emp_dao.insert_emp(employees)
 
 # print(last_row_id)
-
+# emp_dao.get_all_employees()
 # x = emp_dao.update_emp(employees, fname="KWRGS", lname="DONEEEE")
 # print(x)
 # DELETE
@@ -60,22 +56,53 @@ dep_obj = DAO.DepartmentDAO()
 
 # Insert into
 # dep1 = DAO.Department(5, "Data Science", "20000-25000", "Updated from python2")
-# UPDATEEEEE
+# # UPDATEEEEE
 # # dep2 = DAO.Department(8, "Data Engineering", "20000-25000", "Updated from python4")
 # departments = ["1", "2", "3"]
-# # last_row_id = dep_obj.insert_dep(departments)
+# last_row_id = dep_obj.insert_dep(departments)
 
 # x = dep_obj.update_dep(departments, name="Kwrgsssssssss", description="from KWRGS")
 # print(x)
 # dep_obj.get_all_departments()
 
-# Insert into KWRGS
-dep1 = DAO.Department(5, "Data Science", "20000-25000", "Updated from python2")
+# # Insert into KWRGS
+# dep1 = DAO.Department(5, "Data Science", "20000-25000", "Updated from python2")
+# !Insert into dep
 
-last_row_id = dep_obj.insert_dep(
-    name="INSERT_KWRGS3", salary_range="1000-5000", description="HEYYYY from KWRGS"
-)
-# DELETEEE
+# last_row_id = dep_obj.insert_dep(
+#     name="Software Engineer", salary_range="1000-5000", description="Software Engineer"
+# )
 # dep_obj.get_all_departments()
-x = ["11", "10"]
-dep_obj.delete_dep(x)
+# # DELETEEE
+# # dep_obj.get_all_departments()
+# x = ["11", "10"]
+# dep_obj.delete_dep(x)
+
+
+##################LEave
+
+leave = DAO.LeaveDAO()
+# x = leave.get_leave_by_id("2")
+# print(x)
+
+
+# Insert Leave
+# Employee_emp_id
+#! Insert into KWRGS
+
+# last_row_id = leave.insert_leave(
+#     Employee_emp_id=2, date="2023-02-23", status="Sick", reason="Sick"
+# )
+# print(last_row_id)
+leave.get_all_leaves()
+#! Update Leave
+leaves = ["1", "2"]
+x = leave.update_leave(leaves, reason="ssssssss", status="from KWRGS")
+print(x)
+leave.get_all_leaves()
+
+leave.delete_leave(leaves[0])
+leave.get_all_leaves()
+
+# dep_obj.get_all_departments()
+# leave.update_leave()
