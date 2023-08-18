@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}" {%block head%}{% endblock%} </head>
+
+<body>
+    {%block tableHeader%}{% endblock%}
+
+    <table class="styled-table">
+        <thead>
+            <tr>
+                {% for column_name in column_names %}
+                <th>{{ column_name }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        {% for record in records %}
+        <tr>
+            {% for value in record %}
+            <td>{{ value }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+
+
+    {%block body%}{% endblock%}
+</body>
+
+</html>

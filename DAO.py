@@ -78,8 +78,10 @@ class EmployeeDAO:
         query = "SELECT emp_id,fname,lname,location,phone1,sex,email,pass FROM employee"
         self.cursor.execute(query)
         result = self.cursor.fetchall()
-        [print(i) for i in result]
-        return result
+        column_names = [desc[0] for desc in self.cursor.description]
+        self.cursor.close()
+        self.connection.close()
+        return result, column_names
 
     def get_emp_by_id(self, emp_id):
         """
@@ -95,8 +97,12 @@ class EmployeeDAO:
         self.cursor.execute(query, (emp_id,))
         result = self.cursor.fetchone()
         if result:
+            self.cursor.close()
+            self.connection.close()
             return result
         else:
+            self.cursor.close()
+            self.connection.close()
             return None
 
     def insert_emp(self, employees):
@@ -123,6 +129,8 @@ class EmployeeDAO:
         ]
         self.cursor.executemany(query, values)
         self.connection.commit()
+        self.cursor.close()
+        self.connection.close()
         return self.cursor.lastrowid
 
     def update_emp(self, employees_id, **kwargs):
@@ -143,6 +151,8 @@ class EmployeeDAO:
         print(values)
         self.cursor.executemany(query, values)
         self.connection.commit()
+        self.cursor.close()
+        self.connection.close()
         print(self.cursor.rowcount, "record(s) affected")
 
     def delete_emp(self, emp_ids):
@@ -158,6 +168,8 @@ class EmployeeDAO:
         values = [([emp]) for emp in emp_ids]
         self.cursor.executemany(query, values)
         self.connection.commit()
+        self.cursor.close()
+        self.connection.close()
         print(self.cursor.rowcount, "record(s) affected")
 
 
@@ -200,9 +212,13 @@ class DepartmentDAO:
         self.cursor.execute(query)
         result = self.cursor.fetchall()
         if result:
-            [print(i) for i in result]
-            return result
+            column_names = [desc[0] for desc in self.cursor.description]
+            self.cursor.close()
+            self.connection.close()
+            return result, column_names
         else:
+            self.cursor.close()
+            self.connection.close()
             return None
 
     def get_dep_by_id(self, dep_id):
@@ -219,32 +235,13 @@ class DepartmentDAO:
         self.cursor.execute(query, (dep_id,))
         result = self.cursor.fetchone()
         if result:
+            self.cursor.close()
+            self.connection.close()
             return result
         else:
+            self.cursor.close()
+            self.connection.close()
             return None
-
-        # def insert_dep(self):
-        """Insert multiple records to the Department table
-
-        Args:
-            departments (list): List of department objects
-
-        Returns:
-            int: The last inserted row ID
-        """
-        query = "INSERT INTO department (dep_id,name,salary_range, description) VALUES (%s,%s, %s,%s)"
-        values = [
-            (
-                dep.dep_id,
-                dep.name,
-                dep.salary_range,
-                dep.description,
-            )
-            for dep in departments
-        ]
-        self.cursor.executemany(query, values)
-        self.connection.commit()
-        return self.cursor.lastrowid
 
     def insert_dep(self, **kwargs):
         """Insert a record into the Department table
@@ -261,27 +258,9 @@ class DepartmentDAO:
         values = tuple(kwargs.values())
         self.cursor.execute(query, values)
         self.connection.commit()
+        self.cursor.close()
+        self.connection.close()
         return self.cursor.lastrowid
-
-        # def update_dep(self, departments):
-        """Update  multiple records to the Department table
-
-        Args:
-            departments (list): List of department objects
-
-        Returns:
-            int: Number of rows affected
-        """
-        # DONE add What valeus to update maybe we can use **kwrgs
-        query = "UPDATE department SET  name=%s, salary_range=%s, description=%s WHERE dep_id = %s"
-        values = [
-            (dep.name, dep.salary_range, dep.description, dep.dep_id)
-            for dep in departments
-        ]
-        print(values)
-        self.cursor.executemany(query, values)
-        self.connection.commit()
-        print(self.cursor.rowcount, "record(s) affected")
 
     def update_dep(self, departments, **kwargs):
         """Update multiple records in the Department table
@@ -301,6 +280,8 @@ class DepartmentDAO:
         print(values)
         self.cursor.executemany(query, values)
         self.connection.commit()
+        self.cursor.close()
+        self.connection.close()
         print(self.cursor.rowcount, "record(s) affected")
 
     def delete_dep(self, dep_ids):
@@ -316,6 +297,8 @@ class DepartmentDAO:
         values = [([dep]) for dep in dep_ids]
         self.cursor.executemany(query, values)
         self.connection.commit()
+        self.cursor.close()
+        self.connection.close()
         print(self.cursor.rowcount, "record(s) affected")
 
 
@@ -362,9 +345,13 @@ class LeaveDAO:
         self.cursor.execute(query)
         result = self.cursor.fetchall()
         if result:
-            [print(i) for i in result]
-            return result
+            column_names = [desc[0] for desc in self.cursor.description]
+            self.cursor.close()
+            self.connection.close()
+            return result, column_names
         else:
+            self.cursor.close()
+            self.connection.close()
             return None
 
     def get_leave_by_id(self, leave_id):
@@ -381,8 +368,12 @@ class LeaveDAO:
         self.cursor.execute(query, (leave_id,))
         result = self.cursor.fetchone()
         if result:
+            self.cursor.close()
+            self.connection.close()
             return result
         else:
+            self.cursor.close()
+            self.connection.close()
             return None
 
     def insert_leave(self, **kwargs):
@@ -406,6 +397,8 @@ class LeaveDAO:
             values = tuple(kwargs.values())
             self.cursor.execute(query, values)
             self.connection.commit()
+            self.cursor.close()
+            self.connection.close()
             return self.cursor.lastrowid
         else:
             raise TypeError(
@@ -430,6 +423,8 @@ class LeaveDAO:
         print(values)
         self.cursor.executemany(query, values)
         self.connection.commit()
+        self.cursor.close()
+        self.connection.close()
         print(self.cursor.rowcount, "record(s) affected")
 
     def delete_leave(self, leave_ids):
@@ -445,6 +440,8 @@ class LeaveDAO:
         values = [([lea]) for lea in leave_ids]
         self.cursor.executemany(query, values)
         self.connection.commit()
+        self.cursor.close()
+        self.connection.close()
         print(self.cursor.rowcount, "record(s) affected")
 
 
@@ -498,9 +495,13 @@ class SalaryDAO:
         self.cursor.execute(query)
         result = self.cursor.fetchall()
         if result:
-            [print(i) for i in result]
-            return result
+            column_names = [desc[0] for desc in self.cursor.description]
+            self.cursor.close()
+            self.connection.close()
+            return result, column_names
         else:
+            self.cursor.close()
+            self.connection.close()
             return None
 
     def get_salary_by_id(self, salary_id):
@@ -517,8 +518,12 @@ class SalaryDAO:
         self.cursor.execute(query, (salary_id,))
         result = self.cursor.fetchone()
         if result:
+            self.cursor.close()
+            self.connection.close()
             return result
         else:
+            self.cursor.close()
+            self.connection.close()
             return None
 
     def insert_salary(self, **kwargs):
@@ -540,6 +545,8 @@ class SalaryDAO:
             values = tuple(kwargs.values())
             self.cursor.execute(query, values)
             self.connection.commit()
+            self.cursor.close()
+            self.connection.close()
             return self.cursor.lastrowid
         else:
             raise TypeError(
@@ -564,6 +571,8 @@ class SalaryDAO:
         print(values)
         self.cursor.executemany(query, values)
         self.connection.commit()
+        self.cursor.close()
+        self.connection.close()
         print(self.cursor.rowcount, "record(s) affected")
 
     def delete_salary(self, salary_ids):
@@ -579,6 +588,8 @@ class SalaryDAO:
         values = [([sal]) for sal in salary_ids]
         self.cursor.executemany(query, values)
         self.connection.commit()
+        self.cursor.close()
+        self.connection.close()
         print(self.cursor.rowcount, "record(s) affected")
 
 
@@ -636,9 +647,13 @@ class PayrollDAO:
         self.cursor.execute(query)
         result = self.cursor.fetchall()
         if result:
-            [print(i) for i in result]
-            return result
+            column_names = [desc[0] for desc in self.cursor.description]
+            self.cursor.close()
+            self.connection.close()
+            return result, column_names
         else:
+            self.cursor.close()
+            self.connection.close()
             return None
 
     def get_payroll_by_id(self, payroll_id):
@@ -655,8 +670,12 @@ class PayrollDAO:
         self.cursor.execute(query, (payroll_id,))
         result = self.cursor.fetchone()
         if result:
+            self.cursor.close()
+            self.connection.close()
             return result
         else:
+            self.cursor.close()
+            self.connection.close()
             return None
 
     def insert_payroll(self, **kwargs):
@@ -683,6 +702,8 @@ class PayrollDAO:
                         values = tuple(kwargs.values())
                         self.cursor.execute(query, values)
                         self.connection.commit()
+                        self.cursor.close()
+                        self.connection.close()
                         return self.cursor.lastrowid
                     else:
                         raise TypeError(
@@ -718,6 +739,8 @@ class PayrollDAO:
         print(values)
         self.cursor.executemany(query, values)
         self.connection.commit()
+        self.cursor.close()
+        self.connection.close()
         print(self.cursor.rowcount, "record(s) affected")
 
     def delete_payroll(self, payroll_ids):
@@ -733,4 +756,6 @@ class PayrollDAO:
         values = [([pay]) for pay in payroll_ids]
         self.cursor.executemany(query, values)
         self.connection.commit()
+        self.cursor.close()
+        self.connection.close()
         print(self.cursor.rowcount, "record(s) affected")
