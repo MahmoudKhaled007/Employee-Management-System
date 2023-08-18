@@ -109,17 +109,30 @@ leave = DAO.LeaveDAO()
 
 
 # ** SALARY
-salary = DAO.SalaryDAO()
+# salary = DAO.SalaryDAO()
+# # salary.get_all_salary()
+# # for i in range(10):
+# #     x = salary.insert_salary(
+
+# #         amount=f"{i+1}000",
+# #         bounes=f"{i+1}00",
+# #         annual=f"2023-0{i+1}-02",
+# #         overtime=f"{i+1}.5",
+# #         department_dep_id="2",
+# #     )
+# # print(x)
+# salary.delete_salary(['1','2'])
 # salary.get_all_salary()
+
+# **Payroll
+payroll = DAO.PayrollDAO()
+# date,report,total_amount,employee_emp_id,leave_leave_id,salary_salary_id,department_dep_id
+
 # for i in range(10):
-#     x = salary.insert_salary(
-        
-#         amount=f"{i+1}000",
-#         bounes=f"{i+1}00",
-#         annual=f"2023-0{i+1}-02",
-#         overtime=f"{i+1}.5",
-#         department_dep_id="2",
-#     )
-# print(x)
-salary.delete_salary(['1','2'])
-salary.get_all_salary()
+#     payroll.insert_payroll(date=f"202{i}-01-01",report=f"Report{i+1}",total_amount=f"{i+1}00",department_dep_id='2',employee_emp_id='2',leave_leave_id='2',salary_salary_id='3')
+
+
+# payroll.get_all_payroll()
+# # payroll.update_payroll(["1", "4"], date="2021-03-06")
+# payroll.get_all_payroll()
+payroll.delete_payroll(["1"])

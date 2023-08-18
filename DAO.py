@@ -1,5 +1,30 @@
 import mysql.connector
 
+# ! NOTES
+""""
+# ! I am using VALUES in SQL queries to prevent SQL injection
+# !I am using **Kwrgs to make function dynamic and take inputs and to not make the function or the query long
+#! when it comes to mandatory fields with **kwrgs i handled it with if condtions and raising a Type Error
+#! DAO is for Data Access Object Design Pattern
+#! he DAO pattern typically involves creating a set of classes or objects that encapsulate the database operations, such as CRUD (Create, Read, Update, Delete) operations. The DAO acts as an intermediary between the application and the database, providing methods or functions to interact with the data.
+
+# !Here are some key characteristics and benefits of using the DAO pattern in Python:
+#
+#! 1. Encapsulation: The DAO encapsulates the database operations, abstracting away the complexities of the underlying database system. This allows the application code to focus on the business logic without worrying about the database details.
+#
+# !2. Separation of Concerns: The DAO pattern separates the database operations from the application logic, promoting a cleaner and more maintainable codebase. It ensures that the business logic remains independent of specific database implementations.
+#
+# !3. Reusability: By encapsulating the database operations within DAO classes or objects, the code becomes more reusable. The same set of DAO methods can be used across different parts of the application, promoting code reuse and reducing duplication.
+#
+# !4. Testability: The DAO pattern facilitates easier unit testing of the application logic by allowing the creation of mock or stub DAO objects. This enables isolated testing of the business logic without the need for an actual database connection.
+#
+#!5. Scalability: With the DAO pattern, it becomes easier to switch or scale the database system without affecting the application code. The DAO layer acts as an abstraction, shielding the application from the underlying database changes.
+#
+#! In Python, the DAO pattern can be implemented using various libraries and frameworks such as SQLAlchemy, Django ORM, or by writing custom database access code using SQL queries or ORM techniques.
+#
+#! Overall, the DAO pattern provides a structured approach to handle database interactions in Python applications, promoting code reusability, maintainability, and testability.
+"""
+
 
 class Employee:
     def __init__(
@@ -552,6 +577,160 @@ class SalaryDAO:
         """
         query = "DELETE FROM salary WHERE salary_id = %s"
         values = [([sal]) for sal in salary_ids]
+        self.cursor.executemany(query, values)
+        self.connection.commit()
+        print(self.cursor.rowcount, "record(s) affected")
+
+
+class Payroll:
+    def __init__(
+        self,
+        payroll_id=None,
+        date=None,
+        report=None,
+        total_amount=None,
+        employee_emp_id=None,
+        leave_leave_id=None,
+        salary_salary_id=None,
+        department_dep_id=None,
+    ):
+        self.payroll_id = payroll_id
+        self.date = date
+        self.report = report
+        self.total_amount = total_amount
+        self.employee_emp_id = employee_emp_id
+        self.leave_leave_id = leave_leave_id
+        self.salary_salary_id = salary_salary_id
+        self.department_dep_id = department_dep_id
+
+
+class PayrollDAO:
+    """
+    _summary_
+    This class for to represent Database Payroll Tables and provides the encapsulation of the database-specific code,
+    that is, it is isolated from the main program.
+    To achieve principle of Separation of Logic and it make it easy when testing
+    """
+
+    def __init__(self):
+        """_summary_
+        When the class being called every time will open a new connection to the database
+        """
+        self.connection = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="mahmoud2001",
+            database="employee_managment_system",
+        )
+        self.cursor = self.connection.cursor(buffered=True)
+
+    def get_all_payroll(self):
+        """
+            Select Statement to retrieve all data for the payroll table
+        Returns:
+            _type_: _description_
+            Object: which contains Record data
+        """
+        # `` because leave is reserved keyword in python
+        query = "SELECT payroll_id,date,report,total_amount,employee_emp_id,leave_leave_id,salary_salary_id,department_dep_id FROM payroll"
+        self.cursor.execute(query)
+        result = self.cursor.fetchall()
+        if result:
+            [print(i) for i in result]
+            return result
+        else:
+            return None
+
+    def get_payroll_by_id(self, payroll_id):
+        """
+            Select Statement to retrieve all data for the Salary based on their id
+        Args:
+            salary_id (_type_): _description_
+                payroll_id (int): id of payroll needs to retrieve
+        Returns:
+            _type_: _description_
+            Object: which contains Record data
+        """
+        query = "SELECT payroll_id,date,report,total_amount,employee_emp_id,leave_leave_id,salary_salary_id,department_dep_id FROM payroll WHERE payroll_id = %s"
+        self.cursor.execute(query, (payroll_id,))
+        result = self.cursor.fetchone()
+        if result:
+            return result
+        else:
+            return None
+
+    def insert_payroll(self, **kwargs):
+        """Insert a record into the payroll table
+
+        Args:
+            **kwargs: Key-value pairs for inserting specific columns
+            department_dep_id(String): Foreign Key is Mandatory to add in Arguments
+            employee_emp_id(String): Foreign Key is ! Mandatory to add in Arguments
+            leave_leave_id(String): Foreign Key is Mandatory to add in Arguments
+            salary_salary_id(String): Foreign Key is Mandatory to add in Arguments
+        Returns:
+            int: The last inserted row ID
+        """
+
+        if "department_dep_id" in kwargs:
+            if "employee_emp_id" in kwargs:
+                if "leave_leave_id" in kwargs:
+                    if "salary_salary_id" in kwargs:
+                        # Code to be executed if all conditions are met
+                        column_names = ", ".join(list(kwargs.keys()))
+                        value_placeholders = ", ".join(["%s" for _ in kwargs.keys()])
+                        query = f"INSERT INTO payroll ({column_names}) VALUES ({value_placeholders})"
+                        values = tuple(kwargs.values())
+                        self.cursor.execute(query, values)
+                        self.connection.commit()
+                        return self.cursor.lastrowid
+                    else:
+                        raise TypeError(
+                            "Missing Mandatory Foreign Key: Please add salary_salary_id to the arguments"
+                        )
+                else:
+                    raise TypeError(
+                        "Missing Mandatory Foreign Key: Please add leave_leave_id to the arguments"
+                    )
+            else:
+                raise TypeError(
+                    "Missing Mandatory Foreign Key: Please add employee_emp_id to the arguments"
+                )
+        else:
+            raise TypeError(
+                "Missing Mandatory Foreign Key: Please add department_dep_id to the arguments"
+            )
+
+    def update_payroll(self, payroll_ids, **kwargs):
+        """Update multiple records in the salary table
+
+        Args:
+            payroll_ids (list): List of ids payrolls
+            **kwargs: Additional key-value pairs for updating specific columns
+
+        Returns:
+            int: Number of rows affected
+        """
+        # Construct the SET clause dynamically based on kwargs
+        set_clause = ", ".join([f"{key}=%s" for key in kwargs.keys()])
+        query = f"UPDATE payroll SET {set_clause} WHERE payroll_id = %s"
+        values = [tuple(list(kwargs.values()) + [pay]) for pay in payroll_ids]
+        print(values)
+        self.cursor.executemany(query, values)
+        self.connection.commit()
+        print(self.cursor.rowcount, "record(s) affected")
+
+    def delete_payroll(self, payroll_ids):
+        """Delete  records to the Leaves table
+
+        Args:
+            payroll_ids (list): Ids of payroll_ids needs to be deleted
+
+        Returns:
+            int: Number of rows affected
+        """
+        query = "DELETE FROM payroll WHERE payroll_id = %s"
+        values = [([pay]) for pay in payroll_ids]
         self.cursor.executemany(query, values)
         self.connection.commit()
         print(self.cursor.rowcount, "record(s) affected")
