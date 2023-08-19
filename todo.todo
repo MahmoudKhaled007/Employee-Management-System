@@ -2,4 +2,6 @@
 #DONE *args kwrgs
 #TODO Joins in DAO 
 #DONE Maybe we can Table headers 
-#TODO BOOTSTRAP
+#DONE BOOTSTRAP
+#TODO password validation
+#TODO Date picker

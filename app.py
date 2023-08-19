@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, url_for, request, flash
 
 from flask_mysqldb import MySQL
 
@@ -54,6 +54,11 @@ def get_emp_by_id():
 
 @app.route("/insert_employee", methods=["GET", "POST"])
 def insert_employee():
+    """
+    The function `insert_employee` inserts employee data into a database and returns a list of all
+    employees.
+    :return: the result of the `get_employees()` function.
+    """
     if request.method == "POST":
         # Retrieve form data
         fname = request.form.get("fname")
@@ -63,10 +68,10 @@ def insert_employee():
         sex = request.form.get("sex")
         email = request.form.get("email")
         password = request.form.get("password")
-
+        print(request.form.get("password"))
         # Create an Employee object
 
-        # Create an instance of the DepartmentDAO and insert the employee
+        # Create an instance of the EmployeeDAO and insert the employee
         employee = DAO.EmployeeDAO()
 
         last_inserted_id = employee.insert_emp(
@@ -78,9 +83,7 @@ def insert_employee():
             email=email,
             password=password,
         )
-
-        return f"Employee inserted. Last inserted ID: {last_inserted_id}"
-
+        return get_employees()
     return render_template("insert_employee.html")
 
 
@@ -136,6 +139,31 @@ def get_dep_by_id():
         return get_departments()
 
 
+@app.route("/insert_dep", methods=["GET", "POST"])
+def insert_department():
+    """
+    The function `insert_department` inserts a new department into a database using form data and
+    returns a list of all departments.
+    :return: the result of the "get_departments()" function.
+    """
+    if request.method == "POST":
+        # Retrieve form data
+        name = request.form.get("name")
+        salary_range = request.form.get("salary_range")
+        description = request.form.get("description")
+
+        # Create an instance of the DepartmentDAO and insert the department
+        department = DAO.DepartmentDAO()
+
+        last_inserted_id = department.insert_dep(
+            name=name,
+            salary_range=salary_range,
+            description=description,
+        )
+        return get_departments()
+    return render_template("insert_dep.html")
+
+
 #!Leave
 @app.route("/leave")
 def get_leaves():
@@ -182,6 +210,33 @@ def get_leave_by_id():
         )
     else:
         return get_leaves()
+
+
+@app.route("/insert_leave", methods=["GET", "POST"])
+def insert_leave():
+    """
+    The function `insert_leave` inserts a leave record into a database table based on form data and
+    returns a page displaying all leave records.
+    :return: the result of calling the `get_leaves()` function.
+    """
+    if request.method == "POST":
+        # Retrieve form data
+        employee_emp_id = request.form.get("employee_emp_id")
+        date = request.form.get("date")
+        reason = request.form.get("reason")
+        status = request.form.get("status")
+
+        # Create an instance of the DepartmentDAO and insert the department
+        leave = DAO.LeaveDAO()
+
+        leave.insert_leave(
+            employee_emp_id=employee_emp_id,
+            date=date,
+            reason=reason,
+            status=status,
+        )
+        return get_leaves()
+    return render_template("insert_leave.html")
 
 
 #!Salary
@@ -234,6 +289,35 @@ def get_salary_by_id():
         return get_salaries()
 
 
+@app.route("/insert_salary", methods=["POST", "GET"])
+def insert_salary():
+    """
+    The function `insert_salary` is used to insert salary information into a database and then retrieve
+    all salaries.
+    :return: the result of calling the "get_salaries()" function.
+    """
+    if request.method == "POST":
+        # Retrieve form data
+        department_dep_id = request.form.get("department_dep_id")
+        amount = request.form.get("amount")
+        bounes = request.form.get("bounes")
+        overtime = request.form.get("overtime")
+        annual = request.form.get("annual")
+
+        # Create an instance of the DepartmentDAO and insert the department
+        salary = DAO.SalaryDAO()
+
+        salary.insert_salary(
+            department_dep_id=department_dep_id,
+            amount=amount,
+            bounes=bounes,
+            overtime=overtime,
+            annual=annual,
+        )
+        return get_salaries()
+    return render_template("insert_salary.html")
+
+
 #!Payroll
 @app.route("/payroll")
 def get_payrolls():
@@ -280,6 +364,35 @@ def get_payroll_by_id():
         )
     else:
         return get_payrolls()
+
+
+@app.route("/insert_payroll", methods=["POST", "GET"])
+def insert_payroll():
+    if request.method == "POST":
+        # Retrieve form data
+        department_dep_id = request.form.get("department_dep_id")
+        employee_emp_id = request.form.get("employee_emp_id")
+        date = request.form.get("date")
+        leave_leave_id = request.form.get("leave_leave_id")
+        total_amount = request.form.get("total_amount")
+        report = request.form.get("report")
+        salary_salary_id = request.form.get("salary_salary_id")
+        department_dep_id = request.form.get("department_dep_id")
+
+        # Create an instance of the DepartmentDAO and insert the department
+        payroll = DAO.PayrollDAO()
+
+        payroll.insert_payroll(
+            employee_emp_id=employee_emp_id,
+            date=date,
+            leave_leave_id=leave_leave_id,
+            total_amount=total_amount,
+            report=report,
+            salary_salary_id=salary_salary_id,
+            department_dep_id=department_dep_id,
+        )
+        return get_payrolls()
+    return render_template("insert_payroll.html")
 
 
 # The `if __name__ == '__main__':` block is used to ensure that the code inside it is only executed

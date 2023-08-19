@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/CSS/insert_form.css">
+
+    <title>Document</title>
+
+
+
+
+</head>
+
+<body>
+
+    <section class="vh-100 gradient-custom">
+        <div class="container py-5 h-100">
+            <div class="row justify-content-center align-items-center h-100">
+                <div class="col-12 col-lg-9 col-xl-7">
+                    <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+                        <div class="card-body p-4 p-md-5">
+                            <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Salary Form</h3>
+                            <form action="/insert_salary" method="post">
+                                <div class="row">
+                                    <div class="col-md-6 mb-4">
+
+                                        <div class="form-outline">
+                                            <input type="text" id="amount" class="form-control form-control-lg"
+                                                name="amount" required />
+                                            <label class="form-label" for="amount">Amount</label>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-6 mb-4">
+
+                                        <div class="form-outline">
+                                            <input type="text" id="date" class="form-control form-control-lg"
+                                                name="bounes" />
+                                            <label class="form-label" for="bounes">Bounes</label>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-4 d-flex align-items-center">
+                                        <div class="form-outline datepicker w-100">
+                                            <input type="text" class="form-control form-control-lg" id="annual"
+                                                name="annual" placeholder="YYYY-MM-DD" />
+                                            <label for=" annual" class="form-label">Annual</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 mb-4 d-flex align-items-center">
+                                        <div class="form-outline datepicker w-100">
+                                            <input type="text" class="form-control form-control-lg" id="status"
+                                                name="overtime" />
+                                            <label for="overtime" class="form-label">Overtime</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-4 d-flex align-items-center">
+                                        <div class="form-outline datepicker w-100">
+                                            <input type="text" class="form-control form-control-lg"
+                                                id="department_dep_id" name="department_dep_id" required />
+                                            <label for="department_dep_id" class="form-label">Department ID</label>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="mt-2 pt-2">
+                                    <input class="btn btn-primary btn-lg " type="submit" value="Submit" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    </div>
+
+
+
+
+</body>
+
+</html>

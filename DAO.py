@@ -75,7 +75,9 @@ class EmployeeDAO:
             _type_: _description_
             Object: which contains Record data
         """
-        query = "SELECT emp_id,fname,lname,location,phone1,sex,email,pass FROM employee"
+        query = (
+            "SELECT emp_id,fname,lname,location,phone1,sex,email,password FROM employee"
+        )
         self.cursor.execute(query)
         result = self.cursor.fetchall()
         column_names = [desc[0] for desc in self.cursor.description]
@@ -93,7 +95,7 @@ class EmployeeDAO:
             _type_: _description_
             Object: which contains Record data
         """
-        query = "SELECT emp_id,fname,lname,location,phone1,sex,email,pass FROM employee WHERE emp_id = %s"
+        query = "SELECT emp_id,fname,lname,location,phone1,sex,email,password FROM employee WHERE emp_id = %s"
         self.cursor.execute(query, (emp_id,))
         result = self.cursor.fetchone()
         column_names = [desc[0] for desc in self.cursor.description]
@@ -346,17 +348,17 @@ class LeaveDAO:
 
     def insert_leave(self, **kwargs):
         """Insert a record into the leave table
-            Employee_emp_id: Foreign Key is Mandatory to add in Arguments
+            employee_emp_id: Foreign Key is Mandatory to add in Arguments
         Args:
             **kwargs: Key-value pairs for inserting specific columns
-            Employee_emp_id(String),
+            employee_emp_id(String),
             date(String),
             status(String),
             reason(String)
         Returns:
             int: The last inserted row ID
         """
-        if "Employee_emp_id" in kwargs:
+        if "employee_emp_id" in kwargs:
             column_names = ", ".join(list(kwargs.keys()))
             value_placeholders = ", ".join(["%s" for _ in kwargs.keys()])
             query = (
