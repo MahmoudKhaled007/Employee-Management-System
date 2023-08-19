@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="../static/CSS/insert_form.css">
 
-    <title>Payroll Form</title>
+    <title>Update Salary</title>
 
 
 
@@ -22,15 +22,15 @@
                 <div class="col-12 col-lg-9 col-xl-7">
                     <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
                         <div class="card-body p-4 p-md-5">
-                            <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Payroll Form</h3>
-                            <form action="/insert_payroll" method="post">
+                            <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Update Salary Form</h3>
+                            <form action="/update_salary" method="post">
                                 <div class="row">
                                     <div class="col-md-6 mb-4">
 
                                         <div class="form-outline">
-                                            <input type="text" id="employee_emp_id" class="form-control form-control-lg"
-                                                name="employee_emp_id" required />
-                                            <label class="form-label" for="employee_emp_id">Employee ID</label>
+                                            <input type="text" id="amount" class="form-control form-control-lg"
+                                                name="amount" />
+                                            <label class="form-label" for="amount">Amount</label>
                                         </div>
 
                                     </div>
@@ -38,8 +38,8 @@
 
                                         <div class="form-outline">
                                             <input type="text" id="date" class="form-control form-control-lg"
-                                                name="date" placeholder="YYYY-MM-DD" required />
-                                            <label class="form-label" for="date">Date</label>
+                                                name="bounes" />
+                                            <label class="form-label" for="bounes">Bounes</label>
                                         </div>
 
                                     </div>
@@ -48,21 +48,28 @@
                                 <div class="row">
                                     <div class="col-md-6 mb-4 d-flex align-items-center">
                                         <div class="form-outline datepicker w-100">
-                                            <input type="text" class="form-control form-control-lg" id="leave_leave_id"
-                                                name="leave_leave_id" required />
-                                            <label for="leave_leave_id" class="form-label">Leave ID</label>
+                                            <input type="text" class="form-control form-control-lg" id="annual"
+                                                name="annual" placeholder="YYYY-MM-DD" />
+                                            <label for=" annual" class="form-label">Annual</label>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6 mb-4 d-flex align-items-center">
                                         <div class="form-outline datepicker w-100">
-                                            <input type="text" class="form-control form-control-lg"
-                                                id="salary_salary_id" name="salary_salary_id" required />
-                                            <label for="salary_salary_id" class="form-label">Salary ID</label>
+                                            <input type="text" class="form-control form-control-lg" id="status"
+                                                name="overtime" />
+                                            <label for="overtime" class="form-label">Overtime</label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
+                                    <div class="col-md-6 mb-4 d-flex align-items-center">
+                                        <div class="form-outline datepicker w-100">
+                                            <input type="text" class="form-control form-control-lg" id="salary_id"
+                                                name="salary_id" required />
+                                            <label for="salary_id" class="form-label">Salary ID</label>
+                                        </div>
+                                    </div>
                                     <div class="col-md-6 mb-4 d-flex align-items-center">
                                         <div class="form-outline datepicker w-100">
                                             <input type="text" class="form-control form-control-lg"
@@ -71,25 +78,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6 mb-4 d-flex align-items-center">
-                                        <div class="form-outline datepicker w-100">
-                                            <input type="text" class="form-control form-control-lg" id="total_amount"
-                                                name="total_amount" required />
-                                            <label for="total_amount" class="form-label">Total Amount</label>
-                                        </div>
-                                    </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-6 mb-4 d-flex align-items-center">
-                                        <div class="form-outline datepicker w-100">
-                                            <input type="textarea" class="form-control form-control-lg" id="report"
-                                                name="report" />
-                                            <label for="report" class="form-label">Report</label>
-                                        </div>
-                                    </div>
-
-                                </div>
-
 
                                 <div class="mt-2 pt-2">
                                     <input class="btn btn-primary btn-lg " type="submit" value="Submit" />

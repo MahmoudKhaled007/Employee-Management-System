@@ -32,7 +32,6 @@ def get_emp_by_id():
         EmployeeDAO = DAO.EmployeeDAO()
         emp_id = request.form.get("input_pr_id")
         records, column_names = EmployeeDAO.get_emp_by_id(str(emp_id))
-        print("before if", records)
         if records:
             records = tuple([str(rec) for rec in records])
             records_list.append(records)
@@ -68,7 +67,6 @@ def insert_employee():
         sex = request.form.get("sex")
         email = request.form.get("email")
         password = request.form.get("password")
-        print(request.form.get("password"))
         # Create an Employee object
 
         # Create an instance of the EmployeeDAO and insert the employee
@@ -85,6 +83,40 @@ def insert_employee():
         )
         return get_employees()
     return render_template("insert_employee.html")
+
+
+@app.route("/update_emp", methods=["GET", "POST"])
+def update_employee():
+    if request.method == "POST":
+        # Retrieve form data
+        emp_id = []
+        emp_id.append(request.form.get("emp_id"))
+        fname = request.form.get("fname")
+        lname = request.form.get("lname")
+        location = request.form.get("location")
+        phone1 = request.form.get("phone1")
+        sex = request.form.get("sex")
+        email = request.form.get("email")
+        password = request.form.get("password")
+        # Create an instance of the DepartmentDAO and insert the department
+        employee = DAO.EmployeeDAO()
+        # * Validation to use Kwargs correct based on the input we will pass to the fucntio
+
+        if emp_id:
+            existing_emp = employee.get_emp_by_id(emp_id[0])
+            if existing_emp:
+                kwargs = {
+                    "fname": fname if fname else existing_emp[0][1],
+                    "lname": lname if lname else existing_emp[0][2],
+                    "location": location if location else existing_emp[0][3],
+                    "phone1": phone1 if phone1 else existing_emp[0][4],
+                    "sex": sex if sex else existing_emp[0][5],
+                    "email": email if email else existing_emp[0][6],
+                    "password": password if password else existing_emp[0][7],
+                }
+        employee.update_emp(employees=emp_id, **kwargs)
+        return get_employees()
+    return render_template("update_emp.html")
 
 
 #!Departments
@@ -116,14 +148,11 @@ def get_dep_by_id():
         department = DAO.DepartmentDAO()
         dep_id = request.form.get("input_pr_id")
         records, column_names = department.get_dep_by_id(str(dep_id))
-        print("before if", records)
         if records:
             records = tuple([str(rec) for rec in records])
             records_list.append(records)
             len_rec = len(records)
-            print("len", records_list)
-            for rec in records:
-                print(rec)
+
         else:
             # Handle the case when record is not found
             return render_template(
@@ -154,14 +183,50 @@ def insert_department():
 
         # Create an instance of the DepartmentDAO and insert the department
         department = DAO.DepartmentDAO()
+        kwargs = {
+            "name": name if name else None,
+            "salary_range": salary_range if salary_range else None,
+            "description": description if description else None,
+        }
+        department.insert_dep(**kwargs)
 
-        last_inserted_id = department.insert_dep(
-            name=name,
-            salary_range=salary_range,
-            description=description,
-        )
         return get_departments()
     return render_template("insert_dep.html")
+
+
+@app.route("/update_dep", methods=["GET", "POST"])
+def update_department():
+    """
+    The function `update_department` updates a department based on the form data received, with optional
+    fields for name, salary range, and description.
+    :return: the result of the `get_departments()` function call.
+    """
+    if request.method == "POST":
+        # Retrieve form data
+        dep_id = []
+        dep_id.append(request.form.get("dep_id"))
+        name = request.form.get("name")
+        salary_range = request.form.get("salary_range")
+        description = request.form.get("description")
+        # Create an instance of the DepartmentDAO and insert the department
+        department = DAO.DepartmentDAO()
+        # * Validation to use Kwargs correct based on the input we will pass to the fucntion
+        if dep_id:
+            existing_dep = department.get_dep_by_id(dep_id[0])
+            if existing_dep:
+                kwargs = {
+                    "name": name if name else existing_dep[0][1],
+                    "salary_range": salary_range
+                    if salary_range
+                    else existing_dep[0][2],
+                    "description": description if description else existing_dep[0][3],
+                }
+
+            # Assuming there's a method to fetch employee details by ID
+
+        department.update_dep(departments=dep_id, **kwargs)
+        return get_departments()
+    return render_template("update_dep.html")
 
 
 #!Leave
@@ -189,14 +254,11 @@ def get_leave_by_id():
         leave = DAO.LeaveDAO()
         leave_id = request.form.get("input_pr_id")
         records, column_names = leave.get_leave_by_id(str(leave_id))
-        print("before if", records)
         if records:
             records = tuple([str(rec) for rec in records])
             records_list.append(records)
             len_rec = len(records)
-            print("len", records_list)
-            for rec in records:
-                print(rec)
+
         else:
             # Handle the case when record is not found
             return render_template(
@@ -225,18 +287,47 @@ def insert_leave():
         date = request.form.get("date")
         reason = request.form.get("reason")
         status = request.form.get("status")
-
-        # Create an instance of the DepartmentDAO and insert the department
+        kwargs = {
+            "employee_emp_id": employee_emp_id if employee_emp_id else None,
+            "date": date if date else None,
+            "reason": reason if reason else None,
+            "status": status if status else None,
+        }
         leave = DAO.LeaveDAO()
+        leave.insert_leave(**kwargs)
+        # Create an instance of the DepartmentDAO and insert the department
 
-        leave.insert_leave(
-            employee_emp_id=employee_emp_id,
-            date=date,
-            reason=reason,
-            status=status,
-        )
         return get_leaves()
     return render_template("insert_leave.html")
+
+
+@app.route("/update_leave", methods=["GET", "POST"])
+def update_leave():
+    if request.method == "POST":
+        # Retrieve form data
+        leave_id = []
+        leave_id.append(request.form.get("leave_id"))
+        employee_emp_id = request.form.get("employee_emp_id")
+        date = request.form.get("date")
+        reason = request.form.get("reason")
+        status = request.form.get("status")
+        leave = DAO.LeaveDAO()
+
+        if leave_id:
+            existing_leave = leave.get_leave_by_id(leave_id[0])
+            if existing_leave:
+                kwargs = {
+                    "employee_emp_id": employee_emp_id
+                    if employee_emp_id
+                    else existing_leave[0][1],
+                    "date": date if date else existing_leave[0][2],
+                    "status": status if status else existing_leave[0][3],
+                    "reason": reason if reason else existing_leave[0][4],
+                }
+
+        leave.update_leave(leave_id, **kwargs)
+        return get_leaves()
+    return render_template("update_leave.html")
 
 
 #!Salary
@@ -266,14 +357,11 @@ def get_salary_by_id():
         salary = DAO.SalaryDAO()
         salary_id = request.form.get("input_pr_id")
         records, column_names = salary.get_salary_by_id(str(salary_id))
-        print("before if", records)
         if records:
             records = tuple([str(rec) for rec in records])
             records_list.append(records)
             len_rec = len(records)
-            print("len", records_list)
-            for rec in records:
-                print(rec)
+
         else:
             # Handle the case when record is not found
             return render_template(
@@ -307,15 +395,46 @@ def insert_salary():
         # Create an instance of the DepartmentDAO and insert the department
         salary = DAO.SalaryDAO()
 
-        salary.insert_salary(
-            department_dep_id=department_dep_id,
-            amount=amount,
-            bounes=bounes,
-            overtime=overtime,
-            annual=annual,
-        )
+        kwargs = {
+            "department_dep_id": department_dep_id if department_dep_id else None,
+            "amount": amount if amount else None,
+            "bounes": bounes if bounes else None,
+            "overtime": overtime if overtime else None,
+            "annual": annual if annual else None,
+        }
+        salary.insert_salary(**kwargs)
         return get_salaries()
     return render_template("insert_salary.html")
+
+
+@app.route("/update_salary", methods=["GET", "POST"])
+def update_salary():
+    if request.method == "POST":
+        # Retrieve form data
+        salary_id = []
+        salary_id.append(request.form.get("salary_id"))
+        department_dep_id = request.form.get("department_dep_id")
+        amount = request.form.get("amount")
+        bounes = request.form.get("bounes")
+        overtime = request.form.get("overtime")
+        annual = request.form.get("annual")
+        salary = DAO.SalaryDAO()
+        if salary_id:
+            existing_salary = salary.get_salary_by_id(salary_id[0])
+            if existing_salary:
+                kwargs = {
+                    "department_dep_id": department_dep_id
+                    if department_dep_id
+                    else existing_salary[0][-1],
+                    "amount": amount if amount else existing_salary[0][1],
+                    "bounes": bounes if bounes else existing_salary[0][2],
+                    "annual": annual if annual else existing_salary[0][3],
+                    "overtime": overtime if overtime else existing_salary[0][4],
+                }
+
+        salary.update_salary(salary_id, **kwargs)
+        return get_salaries()
+    return render_template("update_salary.html")
 
 
 #!Payroll
@@ -348,9 +467,7 @@ def get_payroll_by_id():
             records = tuple([str(rec) for rec in records])
             records_list.append(records)
             len_rec = len(records)
-            print("len", records_list)
-            for rec in records:
-                print(rec)
+
         else:
             # Handle the case when record is not found
             return render_template(
@@ -368,6 +485,12 @@ def get_payroll_by_id():
 
 @app.route("/insert_payroll", methods=["POST", "GET"])
 def insert_payroll():
+    """
+    The function `insert_payroll` inserts payroll data into the database and redirects to the page
+    displaying all payrolls.
+    :return: the result of the `get_payrolls()` function or rendering the "insert_payroll.html"
+    template.
+    """
     if request.method == "POST":
         # Retrieve form data
         department_dep_id = request.form.get("department_dep_id")
@@ -377,22 +500,65 @@ def insert_payroll():
         total_amount = request.form.get("total_amount")
         report = request.form.get("report")
         salary_salary_id = request.form.get("salary_salary_id")
-        department_dep_id = request.form.get("department_dep_id")
 
         # Create an instance of the DepartmentDAO and insert the department
         payroll = DAO.PayrollDAO()
 
-        payroll.insert_payroll(
-            employee_emp_id=employee_emp_id,
-            date=date,
-            leave_leave_id=leave_leave_id,
-            total_amount=total_amount,
-            report=report,
-            salary_salary_id=salary_salary_id,
-            department_dep_id=department_dep_id,
-        )
+        kwargs = {
+            "department_dep_id": department_dep_id if department_dep_id else None,
+            "employee_emp_id": employee_emp_id if employee_emp_id else None,
+            "leave_leave_id": leave_leave_id if leave_leave_id else None,
+            "salary_salary_id": salary_salary_id if salary_salary_id else None,
+            "total_amount": total_amount if total_amount else None,
+            "report": report if report else None,
+            "date": date if date else None,
+        }
+        payroll.insert_payroll(**kwargs)
         return get_payrolls()
     return render_template("insert_payroll.html")
+
+
+@app.route("/update_payroll", methods=["GET", "POST"])
+def update_payroll():
+    if request.method == "POST":
+        # Retrieve form data
+        payroll_id = []
+        payroll_id.append(request.form.get("payroll_id"))
+        department_dep_id = request.form.get("department_dep_id")
+        employee_emp_id = request.form.get("employee_emp_id")
+        date = request.form.get("date")
+        leave_leave_id = request.form.get("leave_leave_id")
+        total_amount = request.form.get("total_amount")
+        report = request.form.get("report")
+        salary_salary_id = request.form.get("salary_salary_id")
+        payroll = DAO.PayrollDAO()
+
+        if payroll_id:
+            existing_payroll = payroll.get_payroll_by_id(payroll_id[0])
+            if existing_payroll:
+                kwargs = {
+                    "date": date if date else existing_payroll[0][1],
+                    "report": report if report else existing_payroll[0][2],
+                    "total_amount": total_amount
+                    if total_amount
+                    else existing_payroll[0][3],
+                    "employee_emp_id": employee_emp_id
+                    if employee_emp_id
+                    else existing_payroll[0][4],
+                    "leave_leave_id": leave_leave_id
+                    if leave_leave_id
+                    else existing_payroll[0][5],
+                    "salary_salary_id": salary_salary_id
+                    if salary_salary_id
+                    else existing_payroll[0][6],
+                    "department_dep_id": department_dep_id
+                    if department_dep_id
+                    else existing_payroll[0][-1],
+                }
+
+        payroll.update_payroll(payroll_id, **kwargs)
+        return get_payrolls()
+    return render_template("update_payroll.html")
 
 
 # The `if __name__ == '__main__':` block is used to ensure that the code inside it is only executed

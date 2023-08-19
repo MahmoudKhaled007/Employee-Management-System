@@ -22,9 +22,18 @@
                 <div class="col-12 col-lg-9 col-xl-7">
                     <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
                         <div class="card-body p-4 p-md-5">
-                            <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Department Form</h3>
-                            <form action="/insert_dep" method="post">
+                            <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Update Department Form</h3>
+                            <form action="/update_dep" method="post">
                                 <div class="row">
+                                    <div class="col-md-6 mb-4">
+
+                                        <div class="form-outline">
+                                            <input type="text" id="dep_id" class="form-control form-control-lg"
+                                                name="dep_id" / required placeholder="Must be valid">
+                                            <label class="form-label" for="dep_id">Department ID</label>
+                                        </div>
+
+                                    </div>
                                     <div class="col-md-6 mb-4">
 
                                         <div class="form-outline">
@@ -34,15 +43,7 @@
                                         </div>
 
                                     </div>
-                                    <div class="col-md-6 mb-4">
 
-                                        <div class="form-outline">
-                                            <input type="text" id="salary_range" class="form-control form-control-lg"
-                                                name="salary_range" placeholder="Ex (1000-5000)" />
-                                            <label class="form-label" for="salary_range">Salary Range</label>
-                                        </div>
-
-                                    </div>
                                 </div>
 
                                 <div class="row">
@@ -52,6 +53,15 @@
                                                 name="description" />
                                             <label for="description" class="form-label">Description</label>
                                         </div>
+                                    </div>
+                                    <div class="col-md-6 mb-4">
+
+                                        <div class="form-outline">
+                                            <input type="text" id="salary_range" class="form-control form-control-lg"
+                                                name="salary_range" placeholder="Ex (1000-5000)" />
+                                            <label class="form-label" for="salary_range">Salary Range</label>
+                                        </div>
+
                                     </div>
                                 </div>
                                 <div class="mt-2 pt-2">
