@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<link lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}" {%block head%}{% endblock%} </head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/main.css') }}" {%block head%}{% endblock%}>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
 
 <body>
     {%block tableHeader%}{% endblock%}
@@ -17,15 +19,24 @@
                 {% endfor %}
             </tr>
         </thead>
-        {% for record in records %}
-        <tr>
-            {% for value in record %}
-            <td>{{ value }}</td>
+        <tbody>
+            {% if records %}
+            {% for record in records %}
+            <tr>
+                {% for value in record %}
+                <td>{{ value }}</td>
+                {% endfor %}
+            </tr>
             {% endfor %}
-        </tr>
-        {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="{{ column_names|length }}">No records found.</td>
+            </tr>
+            {% endif %}
+        </tbody>
     </table>
 
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     {%block body%}{% endblock%}
 </body>

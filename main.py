@@ -22,7 +22,15 @@ EmployeeDAO = DAO.EmployeeDAO()
 
 # employees = [emp1,emp2]
 
-# last_row_id = emp_dao.insert_emp(employees)
+last_inserted_id = EmployeeDAO.insert_emp(
+    fname="kk",
+    lname="lname",
+    location="location",
+    phone1="phone1",
+    sex="sex",
+    email="email",
+    password="password",
+)
 
 # print(last_row_id)
 # emp_dao.get_all_employees()
@@ -37,7 +45,7 @@ EmployeeDAO = DAO.EmployeeDAO()
 dep_obj = DAO.DepartmentDAO()
 # dep_obj.get_all_departments()
 
-# de0partment = dep_obj.get_dep_by_id(2)
+# department = dep_obj.get_dep_by_id(2)
 # if department:
 #     print(department)
 # else:
@@ -69,9 +77,9 @@ dep_obj = DAO.DepartmentDAO()
 # dep1 = DAO.Department(5, "Data Science", "20000-25000", "Updated from python2")
 # !Insert into dep
 
-# last_row_id = dep_obj.insert_dep(
-#     name="Software Engineer", salary_range="1000-5000", description="Software Engineer"
-# )
+last_row_id = dep_obj.insert_dep(
+    name="Software Engineer2", salary_range="1000-5000", description="Software Engineer"
+)
 # dep_obj.get_all_departments()
 # # DELETEEE
 # # dep_obj.get_all_departments()
@@ -135,4 +143,4 @@ payroll = DAO.PayrollDAO()
 # payroll.get_all_payroll()
 # # payroll.update_payroll(["1", "4"], date="2021-03-06")
 # payroll.get_all_payroll()
-payroll.delete_payroll(["1"])
+# payroll.delete_payroll(["1"])

@@ -96,43 +96,24 @@ class EmployeeDAO:
         query = "SELECT emp_id,fname,lname,location,phone1,sex,email,pass FROM employee WHERE emp_id = %s"
         self.cursor.execute(query, (emp_id,))
         result = self.cursor.fetchone()
-        if result:
-            self.cursor.close()
-            self.connection.close()
-            return result
-        else:
-            self.cursor.close()
-            self.connection.close()
-            return None
+        column_names = [desc[0] for desc in self.cursor.description]
+        self.cursor.close()
+        self.connection.close()
+        return result, column_names
 
-    def insert_emp(self, employees):
-        """Insert multiple records to the Employee table
-
-        Args:
-            employees (list): List of Employee objects
-
-        Returns:
-            int: The last inserted row ID
-        """
-        query = "INSERT INTO employee (fname, lname, location, phone1, sex, email, pass) VALUES (%s, %s,%s, %s,%s, %s,%s)"
-        values = [
-            (
-                emp.fname,
-                emp.lname,
-                emp.location,
-                emp.phone1,
-                emp.sex,
-                emp.email,
-                emp.password,
-            )
-            for emp in employees
-        ]
-        self.cursor.executemany(query, values)
+    def insert_emp(self, **kwargs):
+        column_names = ", ".join(kwargs.keys())
+        value_placeholders = ", ".join(["%s" for _ in kwargs.keys()])
+        query = f"INSERT INTO employee ({column_names}) VALUES ({value_placeholders})"
+        values = tuple(kwargs.values())
+        self.cursor.execute(query, values)
         self.connection.commit()
         self.cursor.close()
         self.connection.close()
+        print("Inserted", self.cursor.lastrowid, "record")
         return self.cursor.lastrowid
 
+    #
     def update_emp(self, employees_id, **kwargs):
         """Update multiple records in the employee table
 
@@ -211,15 +192,10 @@ class DepartmentDAO:
         query = "SELECT dep_id,name,salary_range, description FROM department"
         self.cursor.execute(query)
         result = self.cursor.fetchall()
-        if result:
-            column_names = [desc[0] for desc in self.cursor.description]
-            self.cursor.close()
-            self.connection.close()
-            return result, column_names
-        else:
-            self.cursor.close()
-            self.connection.close()
-            return None
+        column_names = [desc[0] for desc in self.cursor.description]
+        self.cursor.close()
+        self.connection.close()
+        return result, column_names
 
     def get_dep_by_id(self, dep_id):
         """
@@ -234,14 +210,10 @@ class DepartmentDAO:
         query = "SELECT dep_id,name,salary_range, description FROM department WHERE dep_id = %s"
         self.cursor.execute(query, (dep_id,))
         result = self.cursor.fetchone()
-        if result:
-            self.cursor.close()
-            self.connection.close()
-            return result
-        else:
-            self.cursor.close()
-            self.connection.close()
-            return None
+        column_names = [desc[0] for desc in self.cursor.description]
+        self.cursor.close()
+        self.connection.close()
+        return result, column_names
 
     def insert_dep(self, **kwargs):
         """Insert a record into the Department table
@@ -367,14 +339,10 @@ class LeaveDAO:
         query = "SELECT leave_id,Employee_emp_id,date, status,reason FROM `leave` WHERE leave_id = %s"
         self.cursor.execute(query, (leave_id,))
         result = self.cursor.fetchone()
-        if result:
-            self.cursor.close()
-            self.connection.close()
-            return result
-        else:
-            self.cursor.close()
-            self.connection.close()
-            return None
+        column_names = [desc[0] for desc in self.cursor.description]
+        self.cursor.close()
+        self.connection.close()
+        return result, column_names
 
     def insert_leave(self, **kwargs):
         """Insert a record into the leave table
@@ -494,15 +462,10 @@ class SalaryDAO:
         query = "SELECT salary_id,amount,bounes,annual,overtime,department_dep_id FROM salary"
         self.cursor.execute(query)
         result = self.cursor.fetchall()
-        if result:
-            column_names = [desc[0] for desc in self.cursor.description]
-            self.cursor.close()
-            self.connection.close()
-            return result, column_names
-        else:
-            self.cursor.close()
-            self.connection.close()
-            return None
+        column_names = [desc[0] for desc in self.cursor.description]
+        self.cursor.close()
+        self.connection.close()
+        return result, column_names
 
     def get_salary_by_id(self, salary_id):
         """
@@ -517,14 +480,10 @@ class SalaryDAO:
         query = "SELECT salary_id,amount,bounes,annual,overtime,department_dep_id FROM salary WHERE salary_id = %s"
         self.cursor.execute(query, (salary_id,))
         result = self.cursor.fetchone()
-        if result:
-            self.cursor.close()
-            self.connection.close()
-            return result
-        else:
-            self.cursor.close()
-            self.connection.close()
-            return None
+        column_names = [desc[0] for desc in self.cursor.description]
+        self.cursor.close()
+        self.connection.close()
+        return result, column_names
 
     def insert_salary(self, **kwargs):
         """Insert a record into the leave table
@@ -646,15 +605,10 @@ class PayrollDAO:
         query = "SELECT payroll_id,date,report,total_amount,employee_emp_id,leave_leave_id,salary_salary_id,department_dep_id FROM payroll"
         self.cursor.execute(query)
         result = self.cursor.fetchall()
-        if result:
-            column_names = [desc[0] for desc in self.cursor.description]
-            self.cursor.close()
-            self.connection.close()
-            return result, column_names
-        else:
-            self.cursor.close()
-            self.connection.close()
-            return None
+        column_names = [desc[0] for desc in self.cursor.description]
+        self.cursor.close()
+        self.connection.close()
+        return result, column_names
 
     def get_payroll_by_id(self, payroll_id):
         """
@@ -669,14 +623,10 @@ class PayrollDAO:
         query = "SELECT payroll_id,date,report,total_amount,employee_emp_id,leave_leave_id,salary_salary_id,department_dep_id FROM payroll WHERE payroll_id = %s"
         self.cursor.execute(query, (payroll_id,))
         result = self.cursor.fetchone()
-        if result:
-            self.cursor.close()
-            self.connection.close()
-            return result
-        else:
-            self.cursor.close()
-            self.connection.close()
-            return None
+        column_names = [desc[0] for desc in self.cursor.description]
+        self.cursor.close()
+        self.connection.close()
+        return result, column_names
 
     def insert_payroll(self, **kwargs):
         """Insert a record into the payroll table
