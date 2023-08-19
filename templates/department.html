@@ -6,20 +6,32 @@
 {% endblock%}
 
 {%block tableHeader%}
-<h1>Departments Table</h1>
+<div class="header">
+    <h1>Departments Table</h1>
+</div>
 <div class="row justify-content-center align-items-center h-100">
-    <div class="col-md-4 mb-4">
+    <div class="col-md-3 mb-4">
 
         <form action="/department/" , method="POST">
             <input type="text" name="input_pr_id" placeholder="Enter id" required>
             <button type="submit" class="btn btn-primary">Search</button>
         </form>
     </div>
-    <div class="col-md-8 mb-4">
+    <div class="col-md-3 mb-4">
         <form action="/department/delete" , method="POST">
             <input type="text" name="input_pr_id2" placeholder="Enter id" required>
             <button type="submit" class="btn btn-primary">Delete</button>
         </form>
+    </div>
+    <div class="col-md-3 mb-4">
+        <a href="/insert_dep">
+            <button class="btn btn-primary ">Insert</button>
+        </a>
+    </div>
+    <div class="col-md-3 mb-4">
+        <a href="/update_dep">
+            <button class="btn btn-primary ">Update</button>
+        </a>
     </div>
 </div>
 {% endblock%}

@@ -11,35 +11,35 @@
 
 <body>
     {%block tableHeader%}{% endblock%}
-
-    <table class="styled-table">
-        <thead>
-            <tr>
-                {% for column_name in column_names %}
-                <th>{{ column_name }}</th>
+    <div>
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    {% for column_name in column_names %}
+                    <th>{{ column_name }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% if records %}
+                {% for record in records %}
+                <tr>
+                    {% for value in record %}
+                    <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
                 {% endfor %}
-            </tr>
-        </thead>
-        <tbody>
-            {% if records %}
-            {% for record in records %}
-            <tr>
-                {% for value in record %}
-                <td>{{ value }}</td>
-                {% endfor %}
-            </tr>
-            {% endfor %}
-            {% else %}
-            <tr>
-                <td colspan="{{ column_names|length }}">No records found.</td>
-            </tr>
-            {% endif %}
-        </tbody>
-    </table>
-    <p>{{num_rows_affected}}</p>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                {% else %}
+                <tr>
+                    <td colspan="{{ column_names|length }}">No records found.</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
 
-    {%block body%}{% endblock%}
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+        {%block body%}{% endblock%}
 </body>
 
 </html>

@@ -11,6 +11,23 @@ import DAO
 app = Flask(__name__)
 
 
+#!Sign Up
+@app.route("/signup", methods=["GET", "POST"])
+def signup():
+    if request.method == "POST":
+        # Retrieve form data
+        username = request.form["username"]
+        password = request.form["password"]
+        # Perform sign-up logic
+        # ...
+
+        # Redirect to a success page
+        return redirect("/success")
+
+    # Render the sign-up form template
+    return render_template("signup.html")
+
+
 #!Employees
 @app.route("/employee")
 def get_employees():
@@ -117,6 +134,23 @@ def update_employee():
         employee.update_emp(employees=emp_id, **kwargs)
         return get_employees()
     return render_template("update_emp.html")
+
+
+@app.route("/employee/delete", methods=["POST", "GET"])
+def delete_emp():
+    """
+    The function `delete_emp()` deletes an employee from the database if the request method is POST,
+    otherwise it returns the list of employees.
+    :return: the result of calling the `get_employees()` function.
+    """
+    if request.method == "POST":
+        employee = DAO.EmployeeDAO()
+        emp_id = []
+        emp_id.append(request.form.get("input_pr_id2"))
+        employee.delete_emp(emp_id)
+        return get_employees()
+    else:
+        return get_employees()
 
 
 #!Departments
@@ -231,16 +265,17 @@ def update_department():
 
 @app.route("/department/delete", methods=["POST", "GET"])
 def delete_dep():
+    """
+    The function `delete_dep()` deletes a department based on the department ID received in a POST
+    request, and then returns the updated list of departments.
+    :return: the result of the `get_departments()` function.
+    """
     if request.method == "POST":
         department = DAO.DepartmentDAO()
-        dep_id = request.form.get("input_pr_id2")
-        print(dep_id)
-        num_rows_affected = department.delete_dep(str(dep_id))
-
-        return render_template(
-            "department.html",
-            num_rows_affected=f"{num_rows_affected} record(s) deleted",
-        )
+        dep_id = []
+        dep_id.append(request.form.get("input_pr_id2"))
+        department.delete_dep(dep_id)
+        return get_departments()
 
     else:
         return get_departments()
@@ -345,6 +380,24 @@ def update_leave():
         leave.update_leave(leave_id, **kwargs)
         return get_leaves()
     return render_template("update_leave.html")
+
+
+@app.route("/leave/delete", methods=["POST", "GET"])
+def delete_leave():
+    """
+    The function `delete_leave` deletes a leave entry from a database if the request method is POST,
+    otherwise it returns a list of leaves.
+    :return: the result of calling the `get_leaves()` function.
+    """
+    if request.method == "POST":
+        leave = DAO.LeaveDAO()
+        leave_id = []
+        leave_id.append(request.form.get("input_pr_id2"))
+        leave.delete_leave(leave_id)
+        return get_leaves()
+
+    else:
+        return get_leaves()
 
 
 #!Salary
@@ -452,6 +505,24 @@ def update_salary():
         salary.update_salary(salary_id, **kwargs)
         return get_salaries()
     return render_template("update_salary.html")
+
+
+@app.route("/salary/delete", methods=["POST", "GET"])
+def delete_salary():
+    """
+    The function `delete_salary` deletes a salary record from the database if the request method is
+    POST, otherwise it returns the list of salaries.
+    :return: the result of the function call `get_salaries()`.
+    """
+    if request.method == "POST":
+        salary = DAO.SalaryDAO()
+        salary_id = []
+        salary_id.append(request.form.get("input_pr_id2"))
+        salary.delete_salary(salary_id)
+        return get_salaries()
+
+    else:
+        return get_salaries()
 
 
 #!Payroll
@@ -576,6 +647,19 @@ def update_payroll():
         payroll.update_payroll(payroll_id, **kwargs)
         return get_payrolls()
     return render_template("update_payroll.html")
+
+
+@app.route("/payroll/delete", methods=["POST", "GET"])
+def delete_payroll():
+    if request.method == "POST":
+        payroll = DAO.PayrollDAO()
+        payroll_id = []
+        payroll_id.append(request.form.get("input_pr_id2"))
+        payroll.delete_payroll(payroll_id)
+        return get_payrolls()
+
+    else:
+        return get_payrolls()
 
 
 # The `if __name__ == '__main__':` block is used to ensure that the code inside it is only executed
