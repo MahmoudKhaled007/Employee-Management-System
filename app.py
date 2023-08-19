@@ -229,6 +229,23 @@ def update_department():
     return render_template("update_dep.html")
 
 
+@app.route("/department/delete", methods=["POST", "GET"])
+def delete_dep():
+    if request.method == "POST":
+        department = DAO.DepartmentDAO()
+        dep_id = request.form.get("input_pr_id2")
+        print(dep_id)
+        num_rows_affected = department.delete_dep(str(dep_id))
+
+        return render_template(
+            "department.html",
+            num_rows_affected=f"{num_rows_affected} record(s) deleted",
+        )
+
+    else:
+        return get_departments()
+
+
 #!Leave
 @app.route("/leave")
 def get_leaves():
