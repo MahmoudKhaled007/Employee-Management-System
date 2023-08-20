@@ -1,19 +1,36 @@
-from flask import Flask, render_template, url_for, request, flash
+from flask import Flask, render_template, url_for, request, flash, session
 
 from flask_mysqldb import MySQL
 
 import DAO
+import secrets
+
+secret_key = secrets.token_hex(16)
 
 # `app = Flask(__name__)` creates an instance of the Flask class and assigns it to the variable `app`.
 # The `__name__` argument is a special Python variable that represents the name of the current module.
 # By passing `__name__` as an argument, we are telling Flask to use the current module as the starting
 # point for the application.
 app = Flask(__name__)
+app.secret_key = secret_key
+
+
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+
+@app.route("/logout")
+def logout():
+    # Clear the session
+    session.clear()
+    # Redirect to the home page or any other desired page
+    return index()
 
 
 #!Sign Up
-@app.route("/signup", methods=["GET", "POST"])
-def signup():
+@app.route("/admin", methods=["GET", "POST"])
+def admin():
     if request.method == "POST":
         # Retrieve form data
         username = request.form["username"]
@@ -25,7 +42,7 @@ def signup():
         return redirect("/success")
 
     # Render the sign-up form template
-    return render_template("signup.html")
+    return render_template("admin.html")
 
 
 #!Employees
@@ -525,6 +542,13 @@ def delete_salary():
         return get_salaries()
 
 
+@app.route("/join_all_salary")
+def join_all_salary():
+    salary = DAO.SalaryDAO()
+    records2, column_names = salary.join_all_salary()
+    return render_template("salary.html", records=records2, column_names=column_names)
+
+
 #!Payroll
 @app.route("/payroll")
 def get_payrolls():
@@ -660,6 +684,20 @@ def delete_payroll():
 
     else:
         return get_payrolls()
+
+
+#!Payroll
+@app.route("/join_all_payroll")
+def join_all_payroll():
+    """
+    The function "join_all_payroll" retrieves payroll records from a DAO (Data Access Object) and
+    renders them in a template called "payroll.html".
+    :return: a rendered template called "payroll.html" with the variables "records" and "column_names".
+    """
+
+    payroll = DAO.PayrollDAO()
+    records2, column_names = payroll.join_all_payroll()
+    return render_template("payroll.html", records=records2, column_names=column_names)
 
 
 # The `if __name__ == '__main__':` block is used to ensure that the code inside it is only executed

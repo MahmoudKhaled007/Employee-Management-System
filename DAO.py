@@ -1,4 +1,9 @@
 import mysql.connector
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 # ! NOTES
 """"
@@ -61,10 +66,11 @@ class EmployeeDAO:
         When the class being called every time will open a new connection to the database
         """
         self.connection = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="mahmoud2001",
-            database="employee_managment_system",
+            host=os.getenv("HOST"),
+            user=os.getenv("USER"),
+            port=os.getenv("PORT"),
+            password=os.getenv("PASSWORD"),
+            database=os.getenv("DATABASE"),
         )
         self.cursor = self.connection.cursor(buffered=True)
 
@@ -172,10 +178,11 @@ class DepartmentDAO:
         When the class being called every time will open a new connection to the database
         """
         self.connection = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="mahmoud2001",
-            database="employee_managment_system",
+            host=os.getenv("HOST"),
+            user=os.getenv("USER"),
+            port=os.getenv("PORT"),
+            password=os.getenv("PASSWORD"),
+            database=os.getenv("DATABASE"),
         )
         self.cursor = self.connection.cursor(buffered=True)
 
@@ -291,10 +298,11 @@ class LeaveDAO:
         When the class being called every time will open a new connection to the database
         """
         self.connection = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="mahmoud2001",
-            database="employee_managment_system",
+            host=os.getenv("HOST"),
+            user=os.getenv("USER"),
+            port=os.getenv("PORT"),
+            password=os.getenv("PASSWORD"),
+            database=os.getenv("DATABASE"),
         )
         self.cursor = self.connection.cursor(buffered=True)
 
@@ -430,10 +438,11 @@ class SalaryDAO:
         When the class being called every time will open a new connection to the database
         """
         self.connection = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="mahmoud2001",
-            database="employee_managment_system",
+            host=os.getenv("HOST"),
+            user=os.getenv("USER"),
+            port=os.getenv("PORT"),
+            password=os.getenv("PASSWORD"),
+            database=os.getenv("DATABASE"),
         )
         self.cursor = self.connection.cursor(buffered=True)
 
@@ -450,6 +459,15 @@ class SalaryDAO:
         result = self.cursor.fetchall()
         column_names = [desc[0] for desc in self.cursor.description]
 
+        return result, column_names
+
+    def join_all_salary(self):
+        query = """SELECT salary.salary_id, salary.amount, salary.bounes, salary.annual, salary.overtime, salary.department_dep_id,department.name
+                    FROM salary
+                    JOIN department ON salary.department_dep_id = department.dep_id"""
+        self.cursor.execute(query)
+        result = self.cursor.fetchall()
+        column_names = [desc[0] for desc in self.cursor.description]
         return result, column_names
 
     def get_salary_by_id(self, salary_id):
@@ -568,10 +586,11 @@ class PayrollDAO:
         When the class being called every time will open a new connection to the database
         """
         self.connection = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="mahmoud2001",
-            database="employee_managment_system",
+            host=os.getenv("HOST"),
+            user=os.getenv("USER"),
+            port=os.getenv("PORT"),
+            password=os.getenv("PASSWORD"),
+            database=os.getenv("DATABASE"),
         )
         self.cursor = self.connection.cursor(buffered=True)
 
@@ -685,3 +704,28 @@ class PayrollDAO:
         self.connection.commit()
 
         print(self.cursor.rowcount, "record(s) affected")
+
+    def join_all_payroll(self):
+        """
+        The function `join_all_payroll` retrieves data from multiple tables in a database and returns
+        the result along with the column names.
+
+        :return: a tuple containing two elements. The first element is the result of the SQL query
+        execution, which is a list of rows retrieved from the database. Each row represents a payroll
+        entry and contains various attributes such as payroll_id, date, report, total_amount,
+        employee_emp_id, employee_fname, leave_leave_id, leave_status, salary_salary_id, salary_amount,
+        department_dep_id,
+        """
+        query = """SELECT payroll.payroll_id, payroll.date, payroll.report, payroll.total_amount, 
+                    employee.emp_id AS employee_emp_id,employee.fname as employee_fname,`leave`.leave_id AS leave_leave_id,`leave`.status as leave_status,  
+                    salary.salary_id AS salary_salary_id,salary.amount as salary_amount, department.dep_id AS department_dep_id, department.name as department_name
+                    FROM payroll
+                    JOIN employee ON payroll.employee_emp_id = employee.emp_id
+                    JOIN `leave` ON payroll.leave_leave_id = `leave`.leave_id
+                    JOIN salary ON payroll.salary_salary_id = salary.salary_id
+                    JOIN department ON payroll.department_dep_id = department.dep_id;"""
+        self.cursor.execute(query)
+        result = self.cursor.fetchall()
+        column_names = [desc[0] for desc in self.cursor.description]
+
+        return result, column_names
