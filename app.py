@@ -28,6 +28,27 @@ def logout():
     return index()
 
 
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        # Get the username and password from the form
+        email = request.form["email"]
+        password = request.form["password"]
+        EmployeeDAO = DAO.EmployeeDAO()
+        records = EmployeeDAO.login(email, password)
+        if records:
+            session["email"] = email
+            if email == "admin@gmail.com":
+                return render_template("admin.html")
+            else:
+                return index()
+        else:
+            error = "Invalid username or password"
+            return render_template("login.html", error=error)
+
+    return render_template("login.html")
+
+
 #!Sign Up
 @app.route("/admin", methods=["GET", "POST"])
 def admin():

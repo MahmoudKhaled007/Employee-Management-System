@@ -90,6 +90,19 @@ class EmployeeDAO:
 
         return result, column_names
 
+    def login(self, email, password):
+        """
+            Select Statement to retrieve email and password for the employees
+        Returns:
+            _type_: _description_
+            Object: which contains Record data
+        """
+        query = "SELECT email,password FROM employee WHERE email =%s and password= %s"
+        self.cursor.execute(query, (email, password))
+        result = self.cursor.fetchone()
+
+        return result
+
     def get_emp_by_id(self, emp_id):
         """
             Select Statement to retrieve all data for the employees based on their id
