@@ -30,7 +30,7 @@ GUI (application program) and database.
 ## How it Works
 
 The scraper uses Selenium to automate browsing the Property Finder website, and Beautiful Soup to parse the HTML data returned. The `scraper.py` script navigates the Property Finder search page by specifying various filters such as location, property type, and price range. Then it iterates through the search results pages, extracts the relevant fields, and writes them to a CSV file, and pkl file.
-
+![Alt text]([/posts/path/to/img.jpg "Optional title](https://github.com/MahmoudKhaled007/Employee-Managment-System/blob/master/Flow.png)")
 ## Fields Extracted
 
 The scraper extracts the following fields for each property:
