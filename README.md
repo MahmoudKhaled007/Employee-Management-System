@@ -1,13 +1,10 @@
 
-#Employee Management System
+# Employee Management System
 
 An Employee Management System is a Full-Stack web application for managing
 the staff data within a small company or organization. The system as such as it has been
 developed is called the Employee Management System. It consists of functionally related
 GUI (application program) and database.
-
-##Tools used 
-
 
 ## Project Dependencies
 *  Python
@@ -17,55 +14,28 @@ GUI (application program) and database.
 - Javascript
 - Bootstrap
 - MySql
-- jinja2
+- Jinja2
 
 ## Getting Started
 
-1. Open the terminal in the project directory 
-2. Run  pip install -r requirements.txt
-3. Activate virtual environment: env\Scripts\activate
-4. After activating virtual env run: python app.py
-5. Add "/" to the localhost URL to run the full app 
+1. Clone the repository:
+2.  Open the terminal in the project directory 
+3. Run  pip install -r requirements.txt
+4. Activate virtual environment: env\Scripts\activate
+5. After activating virtual env run: python app.py
+6. Open your web browser and visit `http://localhost:5000/`
 
 ## How it Works
-
-The scraper uses Selenium to automate browsing the Property Finder website, and Beautiful Soup to parse the HTML data returned. The `scraper.py` script navigates the Property Finder search page by specifying various filters such as location, property type, and price range. Then it iterates through the search results pages, extracts the relevant fields, and writes them to a CSV file, and pkl file.
-![Alt text]([/posts/path/to/img.jpg "Optional title](https://github.com/MahmoudKhaled007/Employee-Managment-System/blob/master/Flow.png)")
-## Fields Extracted
-
-The scraper extracts the following fields for each property:
-- Title
-- Location
-- Property Type
-- Bedrooms
-- Bathrooms
-- Area (in sqm)
-- Price
-- Date Added
-- Amenties 
-- Description
+The user logs in as admin after validating the inputs with the database the user will be able to see all the tables to do any operation he wants.
+When he clicks on any button to make any CRUD operation it will redirect him to another page to do the operation or the same page, then FLASK server will call class DAO the interface between the database and the server to separate the business layer from the database layer. after the request is successful it will return the data from the database to DAO then to FLASK server then to the website to generate the new table for the response.
+All functions in DAO classes are dynamically created and take any number of parameters to make it easier to use and to save memory. All the pages are generated dynamically based on the input from flask using Jinja2
 
 
-## Important Considerations
-
-When engaging in web scraping, it's important to keep in mind that not all websites allow it. Some sites may block your IP address or take legal action if they detect automated scraping activity.
-
-Additionally, web scraping can put a significant strain on the resources of the website being scraped, which may impact its performance and availability for other users.
-
-Therefore, it's important to always be respectful of the website being scraped, adhere to any terms of use or access policies that they have in place and use appropriate methods to limit the load on their servers.
+![Flow Diagram](https://github.com/MahmoudKhaled007/Employee-Managment-System/raw/master/Flow.png)
 
 
-## Challenges
-This website was using HoneyPot Trap for scrappers so, you cannot Request a normal request from Requests library you should act as a normal user thats why i used selenium with user agent
+Contributions are welcome! If you have any suggestions or improvements, please create a pull request.
 
-## Pros of this scrapper 
-- Deque Algorithm to Reduce memory usage by half comparing to normal python lists 
-- Joblib dumb and load to Continue scrapping from the last point if the scrapper interrupted
-- Optimized Code 
-
-## Conclusion
-
-This project demonstrates how to scrape data from a real estate website using Python libraries BeautifulSoup4 and Selenium. By following best practices and using appropriate techniques, you can engage in responsible web scraping while minimizing the negative impact on others.
 ## Authors
 
 - [@MahmoudKhaled007](https://www.github.com/MahmoudKhaled007)
